@@ -1,19 +1,19 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:11111111-1111-4111-8111-111111111111",
+  "serialNumber": "urn:uuid:22222222-2222-4222-8222-222222222222",
   "version": 1,
   "components": [
     {
       "type": "library",
-      "bom-ref": "pkg:generic/demo-lib@1.0.0",
+      "bom-ref": "pkg:generic/demo-lib@1.1.0",
       "name": "demo-lib",
-      "version": "1.0.0",
-      "purl": "pkg:generic/demo-lib@1.0.0",
+      "version": "1.1.0",
+      "purl": "pkg:generic/demo-lib@1.1.0",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          "content": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
         }
       ]
     }
