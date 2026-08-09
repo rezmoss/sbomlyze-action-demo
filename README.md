@@ -8,6 +8,20 @@ This repository is a minimal, reproducible demonstration of
 how a pull request can pass for an ordinary dependency update and fail when a
 component hash changes without a version change.
 
+## Verified demonstrations
+
+These pull requests were run against the SHA-pinned workflow in this repository
+and closed without merging so the original baseline remains reproducible.
+
+| Scenario | Expected result | Evidence |
+|---|---|---|
+| Normal `1.0.0` → `1.1.0` version update | Pass with zero integrity drift | [PR #1](https://github.com/rezmoss/sbomlyze-action-demo/pull/1) · [successful run](https://github.com/rezmoss/sbomlyze-action-demo/actions/runs/31288590170) |
+| Same-version SHA-256 change | Block with one integrity-drift finding | [PR #2](https://github.com/rezmoss/sbomlyze-action-demo/pull/2) · [blocked run](https://github.com/rezmoss/sbomlyze-action-demo/actions/runs/31288715924) · [SARIF finding](https://github.com/rezmoss/sbomlyze-action-demo/security/code-scanning/2) |
+
+In both runs, SBOMlyze verified the release archive checksum and GitHub artifact
+provenance. The blocked run still generated its Job Summary and uploaded valid
+SARIF after enforcing the gate.
+
 The workflow is intentionally small and safe:
 
 - SBOMlyze and the other Actions are pinned to full commit SHAs.
