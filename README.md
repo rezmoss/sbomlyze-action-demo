@@ -1,6 +1,7 @@
 # SBOMlyze Action demo
 
 [![SBOM integrity gate](https://github.com/rezmoss/sbomlyze-action-demo/actions/workflows/sbomlyze.yml/badge.svg)](https://github.com/rezmoss/sbomlyze-action-demo/actions/workflows/sbomlyze.yml)
+[![Generated SBOM baseline](https://github.com/rezmoss/sbomlyze-action-demo/actions/workflows/generated-sbom.yml/badge.svg)](https://github.com/rezmoss/sbomlyze-action-demo/actions/workflows/generated-sbom.yml)
 [![GitHub Marketplace](https://img.shields.io/badge/Marketplace-SBOMlyze%20Diff-blue?logo=github)](https://github.com/marketplace/actions/sbomlyze-diff)
 
 This repository is a minimal, reproducible demonstration of
@@ -29,6 +30,21 @@ The workflow is intentionally small and safe:
 - No pull-request-provided generator commands are executed.
 - Every run writes a Job Summary. SARIF upload is skipped for forked pull
   requests, where GitHub normally provides a read-only token.
+
+## Generated-SBOM baseline test
+
+The `Generated SBOM baseline` workflow demonstrates the
+`workflow-artifact` provider without committing generated SBOMs:
+
+1. Every successful push to `main` uses a SHA-pinned Syft Action to generate
+   `sbom.cdx.json` and upload it as the `baseline-sbom` artifact.
+2. A pull request generates a fresh head SBOM.
+3. SBOMlyze retrieves the newest successful `main` artifact and compares the
+   exact `sbom.cdx.json` entry with the pull-request SBOM.
+
+The generator remains a separate reviewed step. SBOMlyze does not accept or
+execute generator commands from Action inputs. The provider ignores artifacts
+from pull-request runs and requires `actions: read` for artifact lookup.
 
 ## Try the passing example
 
@@ -68,6 +84,8 @@ at version `1.0.0` but its SHA-256 hash changes.
 ## Files
 
 - `.github/workflows/sbomlyze.yml` — the consumer workflow.
+- `.github/workflows/generated-sbom.yml` — Syft generation plus an artifact
+  baseline comparison.
 - `sbom/current.cdx.json` — the baseline tracked on `main`.
 - `examples/version-update.cdx.json` — expected passing pull-request content.
 - `examples/integrity-drift.cdx.json` — expected failing pull-request content.
