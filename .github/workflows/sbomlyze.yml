@@ -1,0 +1,39 @@
+name: SBOM integrity gate
+
+on:
+  pull_request:
+    paths:
+      - sbom/current.cdx.json
+      - .github/workflows/sbomlyze.yml
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  sbom-diff:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout with history
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Compare SBOM with pull request base
+        id: sbomlyze
+        uses: rezmoss/sbomlyze@38e8c3616f56e3748c06fe26bbe68c80b4763ebc # v0.4.0
+        with:
+          sbom-path: sbom/current.cdx.json
+          fail-on: integrity-drift
+          sarif: true
+
+      - name: Upload SARIF
+        if: >-
+          always() &&
+          steps.sbomlyze.outputs.report-sarif != '' &&
+          github.event.pull_request.head.repo.full_name == github.repository
+        uses: github/codeql-action/upload-sarif@e4fba868fa4b1b91e1fdab776edc8cfbe6e9fb81 # v4.37.3
+        with:
+          sarif_file: ${{ steps.sbomlyze.outputs.report-sarif }}
