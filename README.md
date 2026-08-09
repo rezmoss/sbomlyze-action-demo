@@ -37,7 +37,9 @@ The `Generated SBOM baseline` workflow demonstrates the
 `workflow-artifact` provider without committing generated SBOMs:
 
 1. Every successful push to `main` uses a SHA-pinned Syft Action to generate
-   `sbom.cdx.json` and upload it as the `baseline-sbom` artifact.
+   a package-focused `sbom.cdx.json` and upload it as the `baseline-sbom`
+   artifact. Versionless file components are excluded so ordinary reviewed
+   source-file edits are not treated as package integrity drift.
 2. A pull request generates a fresh head SBOM.
 3. SBOMlyze retrieves the newest successful `main` artifact and compares the
    exact `sbom.cdx.json` entry with the pull-request SBOM.
