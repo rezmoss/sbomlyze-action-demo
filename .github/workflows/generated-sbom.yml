@@ -22,8 +22,7 @@ jobs:
       - name: Generate CycloneDX SBOM with Syft
         uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610 # v0.24.0
         env:
-          SYFT_OVERRIDE_DEFAULT_CATALOGERS: package
-          SYFT_SELECT_CATALOGERS: -file
+          SYFT_FILE_METADATA_SELECTION: none
         with:
           path: .
           format: cyclonedx-json
